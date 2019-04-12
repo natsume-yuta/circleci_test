@@ -16,9 +16,8 @@ jobs:
             source .venv/bin/activate
             mkdir python
             pip install pipenv==11.10.0
-            pipenv lock --python $(which python) --requirements > python/requirements.txt
-            docker image build --tag installer:latest .
-            docker run --rm -v python/requirements.txt:/workdir/requirements.txt installer:latest
+            pipenv lock --python $(which python) --requirements > requirements.txt
+            make build
             zip -r layer.zip python
 
 workflows:
