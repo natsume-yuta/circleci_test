@@ -12,6 +12,8 @@ jobs:
           command: |
             set -x
 
+            python -m venv .venv
+            source .venv/bin/activate
             mkdir python
             pip install pipenv==11.10.0
             pipenv lock --python $(which python) --requirements > python/requirements.txt
