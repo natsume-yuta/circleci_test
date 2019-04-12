@@ -6,4 +6,4 @@ ENV PIPENV_VERSION=11.5.2 \
 WORKDIR /workdir
 COPY Pipfile* ./
 RUN yum install -y python36-pip gcc
-ENTRYPOINT ["python", "-m", "pip", "install", "-r", "requirements.txt", "-t", "."]
+ENTRYPOINT ["python3", "-m", "pip", "install", "-r", "requirements.txt", "-t", "."]
