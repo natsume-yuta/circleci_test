@@ -1,0 +1,26 @@
+version: 2
+
+jobs:
+  install:
+    docker:
+      - image: circleci/python:3.7.2
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: docker test
+          command: |
+            set -x
+
+            mkdir python
+            pip install pipenv==11.10.0
+            pipenv lock --python $(which python) --requirements > python/requirements.txt
+            docker image build --tag installer:latest .
+            docker run --rm -v python/requirements.txt:/workdir/requirements.txt installer:latest
+            zip -r layer.zip python
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - install
