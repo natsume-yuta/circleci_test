@@ -1,37 +1,22 @@
 version: 2
 
 jobs:
-  install:
-    docker:
-      - image: circleci/python:3.7.2
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: docker test
-          command: |
-            set -x
-
-            python -m venv .venv
-            source .venv/bin/activate
-            mkdir python
-            pip install pipenv==11.10.0
-            pipenv lock --python $(which python) --requirements > requirements.txt
-            make build
-            zip -r layer.zip python
   parallel_test:
-    #parallelism: 2
+    parallelism: 2
     docker:
       - image: circleci/python:3.7.2
     steps:
       - checkout
+      - run:
+          name: sleep
+          command: sleep 45
       - run:
           name: execute parallel
           command: |
             set -x
             
-            #circleci tests split --index=0
-            #circleci tests split --index=1
+            circleci tests split --index=0
+            circleci tests split --index=1
             [[ "$CIRCLE_NODE_INDEX" == 0 ]] && make sleep-10 || make sleep-15
 
 
