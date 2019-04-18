@@ -19,9 +19,24 @@ jobs:
             pipenv lock --python $(which python) --requirements > requirements.txt
             make build
             zip -r layer.zip python
+  parallel_test:
+    parallelism: 2
+    docker:
+      - image: circleci/python:3.7.2
+    steps:
+      - checkout
+      - run:
+          name: execute parallel
+          command: |
+            set -x
+            
+            circleci tests glob Makefile | circleci tests split --index=0
+            circleci tests glob Makefile | circleci tests split --index=1
+            [[ "$CIRCLE_NODE_INDEX" == 0 ]] && make sleep-10 || make sleep-15
+
 
 workflows:
   version: 2
   test:
     jobs:
-      - install
+      - parallel_test
