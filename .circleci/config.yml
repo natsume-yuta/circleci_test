@@ -8,15 +8,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: sleep
-          command: sleep 45
-      - run:
           name: execute parallel
           command: |
             set -x
             
-            circleci tests split --index=0
-            circleci tests split --index=1
             [[ "$CIRCLE_NODE_INDEX" == 0 ]] && make sleep-10 || make sleep-15
 
 
