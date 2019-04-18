@@ -1,27 +1,43 @@
 version: 2
 
-jobs:
-  install:
+references:
+  template: &template
     docker:
       - image: circleci/python:3.7.2
     steps:
-      - checkout
-      - setup_remote_docker
       - run:
-          name: docker test
-          command: |
-            set -x
+          name: test
+          command: echo sinofseven
 
-            python -m venv .venv
-            source .venv/bin/activate
-            mkdir python
-            pip install pipenv==11.10.0
-            pipenv lock --python $(which python) --requirements > requirements.txt
-            make build
-            zip -r layer.zip python
+jobs:
+  job_A:
+    <<: *template
+  job_B:
+    <<: *template
+  job_C:
+    <<: *template
+  job_D:
+    <<: *template
+  job_E:
+    <<: *template
+  job_F:
+    <<: *template
 
 workflows:
   version: 2
   test:
     jobs:
-      - install
+      - job_A
+      - job_B:
+          requires:
+            - job_A
+      - job_D:
+          requires:
+            - job_B
+      - job_E:
+          requires:
+            - job_E
+      - job_C
+      - job_F:
+          requires:
+            - job_C
