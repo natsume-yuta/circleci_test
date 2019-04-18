@@ -30,8 +30,8 @@ jobs:
           command: |
             set -x
             
-            circleci tests glob Makefile | circleci tests split --index=0
-            circleci tests glob Makefile | circleci tests split --index=1
+            circleci tests split --index=0
+            circleci tests split --index=1
             [[ "$CIRCLE_NODE_INDEX" == 0 ]] && make sleep-10 || make sleep-15
 
 
