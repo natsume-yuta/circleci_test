@@ -3,7 +3,7 @@ version: 2
 references:
   template: &template
     docker:
-      - image: circleci/python:3.7.2
+      - image: alpine
     steps:
       - run:
           name: test
